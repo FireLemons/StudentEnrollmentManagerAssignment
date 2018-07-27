@@ -1,0 +1,180 @@
+﻿<Window x:Class="Assingment5.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Assingment5"
+        mc:Ignorable="d"
+        Style="{DynamicResource MainWindow}">
+    <Window.Resources>
+        
+    </Window.Resources>
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition/>
+            <ColumnDefinition/>
+        </Grid.ColumnDefinitions>
+        <DockPanel Grid.Column="0">
+            <TextBlock DockPanel.Dock="Top" Style="{StaticResource TitleText}">
+                Student Manager
+            </TextBlock>
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                </Grid.ColumnDefinitions>
+                <ListBox Name="StudentList" 
+                         Grid.Column="0" 
+                         ItemContainerStyle="{StaticResource NoPaddingListItem}"
+                         ItemsSource="{Binding StudentList}"
+                         SelectedItem="{Binding SelectedStudent}"
+                         Style="{StaticResource DarkListBox}">
+                    <ListBox.ItemTemplate>
+                        <DataTemplate>
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition/>
+                                    <ColumnDefinition Width="8*"/>
+                                    <ColumnDefinition Width="7*"/>
+                                </Grid.ColumnDefinitions>
+                                <TextBlock Grid.Column="0" Style="{StaticResource PaddedText}">
+                                    <TextBlock.ToolTip>
+                                        <MultiBinding Mode="OneWay" Converter="{StaticResource NameAndIDToListText}" ConverterParameter="{}{0}({1} {2})">
+                                            <Binding Path="ID"/>
+                                            <Binding Path="FirstName"/>
+                                            <Binding Path="LastName"/>
+                                        </MultiBinding>
+                                    </TextBlock.ToolTip>
+                                    <TextBlock.Text>
+                                        <MultiBinding Mode="OneWay" Converter="{StaticResource NameAndIDToListText}" ConverterParameter="{}{0}({1} {2})">
+                                            <Binding Path="ID"/>
+                                            <Binding Path="FirstName"/>
+                                            <Binding Path="LastName"/>
+                                        </MultiBinding>
+                                    </TextBlock.Text>
+                                </TextBlock>
+                                <Button Grid.Column="1" Click="EditStudent"   Style="{StaticResource DarkButton}">
+                                    Edit
+                                </Button>
+                                <Button Grid.Column="2" Click="DeleteStudent" Style="{StaticResource DangerButton}">
+                                    ×
+                                </Button>
+                            </Grid>
+                        </DataTemplate>
+                    </ListBox.ItemTemplate>
+                </ListBox>
+
+                <StackPanel Grid.Column="1" Name="StudentForm">
+                    <ContentControl Name="StudentFirstName" Template="{DynamicResource PlaceHolderInput}" local:PlaceholderAttachedProperties.Placeholder="Student First Name"/>
+                    <ContentControl Name="StudentLastName"  Template="{DynamicResource PlaceHolderInput}" local:PlaceholderAttachedProperties.Placeholder="Student Last Name"/>
+                    <ContentControl Name="StudentID"        Template="{DynamicResource PlaceHolderInput}" local:PlaceholderAttachedProperties.Placeholder="Student ID"/>
+                    <ContentControl Name="StudentAge"       Template="{DynamicResource PlaceHolderInput}" local:PlaceholderAttachedProperties.Placeholder="Student Age"/>
+                    <WrapPanel>
+                        <TextBlock Style="{StaticResource OptionLabel}">
+                            Gender:
+                        </TextBlock>
+                        <RadioButton GroupName="Gender" Content="Male"   
+                                     IsChecked="{Binding Gender, Converter={StaticResource RadiobuttonToGender}, ConverterParameter={x:Static local:Gender.Male}}" 
+                                     Style="{StaticResource RadioButton}"/>
+                        <RadioButton GroupName="Gender" Content="Female"
+                                     IsChecked="{Binding Gender, Converter={StaticResource RadiobuttonToGender}, ConverterParameter={x:Static local:Gender.Female}}" 
+                                     Style="{StaticResource RadioButton}"/>
+                        <RadioButton GroupName="Gender" Content="Other"
+                                     IsChecked="{Binding Gender, Converter={StaticResource RadiobuttonToGender}, ConverterParameter={x:Static local:Gender.Other}}" 
+                                     Style="{StaticResource RadioButton}"/>
+                    </WrapPanel>
+                    <WrapPanel>
+                        <TextBlock Style="{StaticResource OptionLabel}">
+                            Level:
+                        </TextBlock>
+                        <RadioButton GroupName="Level"
+                                     Content="Undergraduate"
+                                     IsChecked="{Binding IsGrad, Converter={StaticResource RadiobuttonToGradStatus}, ConverterParameter=undergrad}"
+                                     Style="{StaticResource RadioButton}"/>
+                        <RadioButton GroupName="Level"
+                                     Content="Graduate"
+                                     IsChecked="{Binding IsGrad, Converter={StaticResource RadiobuttonToGradStatus}, ConverterParameter=grad}"
+                                     Style="{StaticResource RadioButton}"/>
+                    </WrapPanel>
+                    <WrapPanel>
+                        <TextBlock Foreground="{Binding IsError, Converter={StaticResource IsErrorToColor}, Mode=OneWay}"
+                                   Style="{StaticResource FeedbackDisplay}" 
+                                   Text="{Binding Feedback}"/>
+                    </WrapPanel>
+                    <Button Click="ClearStudentForm" Content="{Binding IsEdit, Converter={StaticResource IsEditToClearButtonText}, Mode=OneWay}" Style="{StaticResource DarkButtonLarge}"/>
+                    <Button Click="SetStudent"
+                            Content="{Binding IsEdit, Converter={StaticResource IsEditToSetButtonText}, ConverterParameter=Student, Mode=OneWay}"
+                            IsEnabled="{Binding ErrorField, Converter={StaticResource ErrorFieldToButtonIsEnabled}, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"
+                            Style="{StaticResource DarkButtonLarge}"/>
+                </StackPanel>
+            </Grid>
+        </DockPanel>
+        <DockPanel Grid.Column="1">
+            <TextBlock DockPanel.Dock="Top" Style="{StaticResource TitleText}">
+                Student's Courses Manager
+            </TextBlock>
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                </Grid.ColumnDefinitions>
+                <ListBox Grid.Column="0"
+                         Name="CourseList"
+                         ItemContainerStyle="{StaticResource NoPaddingListItem}"
+                         ItemsSource="{Binding CourseList}"
+                         SelectedItem="{Binding SelectedCourse}"
+                         Style="{StaticResource DarkListBox}">
+                    <ListBox.ItemTemplate>
+                        <DataTemplate>
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition/>
+                                    <ColumnDefinition Width="8*"/>
+                                    <ColumnDefinition Width="7*"/>
+                                </Grid.ColumnDefinitions>
+                                <TextBlock Grid.Column="0" Style="{StaticResource PaddedText}">
+                                    <TextBlock.ToolTip>
+                                        <MultiBinding Mode="OneWay" Converter="{StaticResource NameAndIDToListText}" ConverterParameter="{}{0}({1})">
+                                            <Binding Path="Number"/>
+                                            <Binding Path="Name"/>
+                                        </MultiBinding>
+                                    </TextBlock.ToolTip>
+                                    <TextBlock.Text>
+                                        <MultiBinding Mode="OneWay" Converter="{StaticResource NameAndIDToListText}" ConverterParameter="{}{0}({1})">
+                                            <Binding Path="Number"/>
+                                            <Binding Path="Name"/>
+                                        </MultiBinding>
+                                    </TextBlock.Text>
+                                </TextBlock>
+                                <Button Grid.Column="1" Click="EditCourse" Style="{StaticResource DarkButton}">
+                                    Edit
+                                </Button>
+                                <Button Grid.Column="2" Click="DeleteCourse" Style="{StaticResource DangerButton}">
+                                    ×
+                                </Button>
+                            </Grid>
+                        </DataTemplate>
+                    </ListBox.ItemTemplate>
+                </ListBox>
+
+                <StackPanel Grid.Column="1" Name="CourseForm">
+                    <!--Awful hack to get a text hint to work from https://code.msdn.microsoft.com/windowsapps/How-to-add-a-hint-text-to-ed66a3c6-->
+                    <ContentControl Name="CourseName"   Template="{DynamicResource PlaceHolderInput}" local:PlaceholderAttachedProperties.Placeholder="Course Name"/>
+                    <ContentControl Name="CourseNumber" Template="{DynamicResource PlaceHolderInput}" local:PlaceholderAttachedProperties.Placeholder="Course Number"/>
+                    <ContentControl Name="CourseHours"  Template="{DynamicResource PlaceHolderInput}" local:PlaceholderAttachedProperties.Placeholder="# Credit Hours"/>
+                    <ContentControl Name="CourseGPA"    Template="{DynamicResource PlaceHolderInput}" local:PlaceholderAttachedProperties.Placeholder="GPA"/>
+                    <WrapPanel>
+                        <TextBlock Foreground="{Binding IsError, Converter={StaticResource IsErrorToColor}, Mode=OneWay}"
+                                   Style="{StaticResource FeedbackDisplay}" 
+                                   Text="{Binding Feedback}"/>
+                    </WrapPanel>
+                    <Button Content="{Binding IsEdit, Converter={StaticResource IsEditToClearButtonText}, Mode=OneWay}" Style="{StaticResource DarkButtonLarge}" Click="ClearCourseForm"/>
+                    <Button Click="SetCourse"
+                            Content="{Binding IsEdit, Converter={StaticResource IsEditToSetButtonText}, ConverterParameter=Course, Mode=OneWay}"
+                            IsEnabled="{Binding ErrorField, Converter={StaticResource ErrorFieldToButtonIsEnabled}, Mode=OneWay}"
+                            Style="{StaticResource DarkButtonLarge}"/>
+                </StackPanel>
+            </Grid>
+        </DockPanel>
+    </Grid>
+</Window>

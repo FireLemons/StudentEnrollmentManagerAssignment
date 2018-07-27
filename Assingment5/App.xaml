@@ -1,0 +1,128 @@
+﻿<Application x:Class="Assingment5.App"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:local="clr-namespace:Assingment5"
+             xmlns:converters="clr-namespace:Assingment5.BindingConverters"
+             StartupUri="MainWindow.xaml">
+    <Application.Resources>
+        <!--Utility-->
+        <converters:ErrorFieldToButtonIsEnabled        x:Key="ErrorFieldToButtonIsEnabled"/>
+        <converters:IsEditToSetButtonText              x:Key="IsEditToSetButtonText"/>
+        <converters:IsEditToClearButtonText              x:Key="IsEditToClearButtonText"/>
+        <converters:IsErrorToColor                     x:Key="IsErrorToColor"/>
+        <converters:HasTextAndHasFocusToHintVisibility x:Key="HasTextAndHasFocusToHintVisibility"/>
+        <converters:NameAndIDToListText                x:Key="NameAndIDToListText"/>
+        <converters:PercentageToWidth                  x:Key="PercentageToWidth"/>
+        <converters:RadiobuttonToGender                x:Key="RadiobuttonToGender"/>
+        <converters:RadiobuttonToGradStatus            x:Key="RadiobuttonToGradStatus"/>
+        <!--Colors-->
+        <SolidColorBrush x:Key="DarkThemeGray0"   Color="#0f0f0f"/>
+        <SolidColorBrush x:Key="DarkThemeGray1"   Color="#1d1d1d"/>
+        <SolidColorBrush x:Key="DarkThemeGray2"   Color="#252525"/>
+        <SolidColorBrush x:Key="DarkThemeGray3"   Color="#444"/>
+        <SolidColorBrush x:Key="DarkThemeGray4"   Color="#555"/>
+
+        <SolidColorBrush x:Key="DarkRed"          Color="#b71c1c"/>
+        <SolidColorBrush x:Key="DarkRedHighlight" Color="#c62828"/>
+        <!--Styles-->
+        <Style x:Key="DarkButton" TargetType="Button">
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Background"      Value="{StaticResource DarkThemeGray3}"/>
+            <Setter Property="Cursor"          Value="Hand"/>
+            <Setter Property="FontSize"        Value="12pt"/>
+            <Setter Property="Foreground"      Value="White"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type Button}">
+                        <Border Background="{TemplateBinding Background}">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Background" Value="{StaticResource DarkThemeGray4}"/>
+                </Trigger>
+                <Trigger Property="IsEnabled" Value="False">
+                    <Setter Property="Background" Value="#0f0f0f"/>
+                    <Setter Property="Foreground" Value="{StaticResource DarkThemeGray1}"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+        <Style x:Key="DangerButton" TargetType="Button" BasedOn="{StaticResource DarkButton}">
+            <Setter Property="Background" Value="{StaticResource DarkRed}"/>
+            <Setter Property="ToolTip"    Value="Delete"/>
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Background" Value="{StaticResource DarkRedHighlight}"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+        <Style x:Key="DarkButtonLarge" TargetType="Button" BasedOn="{StaticResource DarkButton}">
+            <Setter Property="FontSize" Value="24"/>
+        </Style>
+        <Style x:Key="DarkListBox" TargetType="ListBox">
+            <Setter Property="Background"                 Value="{StaticResource DarkThemeGray2}"/>
+            <Setter Property="BorderThickness"            Value="0"/>
+            <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+            <Setter Property="Foreground"                 Value="White"/>
+        </Style>
+        <Style x:Key="NoPaddingListItem" TargetType="ListBoxItem">
+            <Setter Property="Padding"         Value="0"/>
+            <Setter Property="BorderThickness" Value="0"/>
+        </Style>
+        <Style x:Key="RadioButton" TargetType="RadioButton">
+            <Setter Property="Foreground"               Value="White"/>
+            <Setter Property="Margin"                   Value="4,0"/>
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+        </Style>
+        <Style x:Key="TitleText" TargetType="TextBlock">
+            <Setter Property="FontSize"      Value="24pt"/>
+            <Setter Property="Foreground"    Value="White"/>
+            <Setter Property="TextAlignment" Value="Center"/>
+        </Style>
+        <Style x:Key="PaddedText" TargetType="TextBlock">
+            <Setter Property="Width" Value="{Binding Converter={StaticResource PercentageToWidth}, ConverterParameter=.75, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=ListBox}, Path=ActualWidth}"/>
+            <!--RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=ListBox} Gets data of listbox ancestor-->
+            <!--Path=ActualWidth                                                        Makes textbox share width with listbox ancestor-->
+            <!--Converter={StaticResource PercentageConverter}                          Changes the width of the textbox to a percentage of its current width-->
+            <!--ConverterParameter=.75                                                  Parameter to pass into the converter. 75%-->
+            <Setter Property="Padding"      Value="8"/>
+            <Setter Property="TextTrimming" Value="CharacterEllipsis"/>
+        </Style>
+        <Style x:Key="OptionLabel" TargetType="TextBlock">
+            <Setter Property="FontSize"   Value="10pt"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="Padding"    Value="4"/>
+        </Style>
+        <Style x:Key="FeedbackDisplay" TargetType="TextBlock">
+            <Setter Property="FontSize"     Value="14"/>
+            <Setter Property="Padding"      Value="4"/>
+            <Setter Property="TextWrapping" Value="Wrap"/>
+        </Style>
+        <Style x:Key="MainWindow" TargetType="Window">
+            <Setter Property="Background" Value="{StaticResource DarkThemeGray1}"/>
+            <Setter Property="Height"     Value="633"/>
+            <Setter Property="Width"      Value="1024"/>
+            <Setter Property="MinHeight"  Value="128"/>
+            <Setter Property="MinWidth"   Value="800"/>
+            <Setter Property="Title"      Value="Student Enrollment Manager"/>
+        </Style>
+        <!--Templates-->
+        <!--Awful hack to get a text hint to work from https://code.msdn.microsoft.com/windowsapps/How-to-add-a-hint-text-to-ed66a3c6-->
+        <ControlTemplate x:Key="PlaceHolderInput">
+            <Grid Background="{StaticResource DarkThemeGray2}">
+                <TextBlock Margin="5,2" Text="{TemplateBinding local:PlaceholderAttachedProperties.Placeholder}" Foreground="{StaticResource DarkThemeGray4}" >
+                    <TextBlock.Visibility>
+                        <MultiBinding Converter="{StaticResource HasTextAndHasFocusToHintVisibility}">
+                            <Binding ElementName="Input" Path="Text.IsEmpty" />
+                            <Binding ElementName="Input" Path="IsFocused" />
+                        </MultiBinding>
+                    </TextBlock.Visibility>
+                </TextBlock>
+                <TextBox Name="Input" Background="Transparent" Foreground="White" ToolTip="{TemplateBinding local:PlaceholderAttachedProperties.Placeholder}"/>
+            </Grid>
+        </ControlTemplate>
+    </Application.Resources>
+</Application>
