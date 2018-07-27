@@ -1,2 +1,2 @@
 # StudentEnrollmentManagerAssignment
-Learning about data binding in wpf
+Learned about data binding in wpf
